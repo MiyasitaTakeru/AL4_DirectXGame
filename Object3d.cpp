@@ -413,10 +413,10 @@ void Object3d::CreateModel()
 	vector<XMFLOAT3>texcoords; // テクスチャUV
 	// 1行ずつ読み込む
 	string line;
-	while(getline(file, line)) {
+	while (getline(file, line)) {
 		// 1行分の文字列をストリームに変換して解析しやすくする
 		std::istringstream line_stream(line);
-		
+
 		// 半角スペース区切りで行の先頭文字列を取得
 		string key;
 		getline(line_stream, key, ' ');
@@ -434,26 +434,22 @@ void Object3d::CreateModel()
 			VertexPosNormalUv vertex{};
 			vertex.pos = position;
 			vertices.emplace_back(vertex);
-
-			//先頭文字列がfならポリゴン(三角形)
-			if (key == "f") {
-				//半角スペース区切りで行の続きの行を読み込む
-				string index_string;
-				while (getline(line_stream, index_string, ' ')) {
-					//頂点インデックス1個分の文字列をストリームに変換して解析しやすくする
-					std::istringstream index_stream(index_string);
-					unsigned short indexPosition;
-					index_stream >> indexPosition;
-					//頂点インデックスに追加
-					indices.emplace_back(indexPosition - 1);
-
-				}
-
-			}
-
 		}
-
+		//先頭文字列がfならポリゴン(三角形)
+		if (key == "f") {
+			//半角スペース区切りで行の続きの行を読み込む
+			string index_string;
+			while (getline(line_stream, index_string, ' ')) {
+				//頂点インデックス1個分の文字列をストリームに変換して解析しやすくする
+				std::istringstream index_stream(index_string);
+				unsigned short indexPosition;
+				index_stream >> indexPosition;
+				//頂点インデックスに追加
+				indices.emplace_back(indexPosition - 1);
+			}
+		}
 	}
+
 	// ファイルを閉じる
 	file.close();
 
